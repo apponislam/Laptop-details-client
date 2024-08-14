@@ -11,6 +11,7 @@ import { HelmetProvider } from "react-helmet-async";
 import AuthProvider from "./AuthProvider/AuthProvider.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AfterSignIn from "./Components/Private/AfterSignIn.jsx";
 
 const router = createBrowserRouter([
     {
@@ -24,11 +25,19 @@ const router = createBrowserRouter([
             },
             {
                 path: "/signin",
-                element: <SignIn></SignIn>,
+                element: (
+                    <AfterSignIn>
+                        <SignIn></SignIn>
+                    </AfterSignIn>
+                ),
             },
             {
                 path: "/signup",
-                element: <SignUp></SignUp>,
+                element: (
+                    <AfterSignIn>
+                        <SignUp></SignUp>
+                    </AfterSignIn>
+                ),
             },
         ],
     },
