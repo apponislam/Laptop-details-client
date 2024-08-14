@@ -1,9 +1,14 @@
+import { Outlet } from "react-router-dom";
 import "./App.css";
+import Header from "./Components/Home/Header";
+import Footer from "./Components/Home/Footer";
 
 function App() {
     return (
         <>
-            <h1 className="text-6xl">HII</h1>
+            <Header></Header>
+            <Outlet></Outlet>
+            <Footer></Footer>
         </>
     );
 }
