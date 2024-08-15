@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const LaptopCard = ({ laptop }) => {
-    console.log(laptop);
+    // console.log(laptop);
     const { productImage, productName, description, ratings, brand, category, createdAt, price } = laptop;
     return (
         <div className="p-2 border border-[#00203f] rounded-xl">

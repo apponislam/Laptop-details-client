@@ -21,3 +21,8 @@ body {
     background-color: #00203f;
     color: white;
 }
+
+.pagination .selected {
+    background: #00203f;
+    color: white;
+}
