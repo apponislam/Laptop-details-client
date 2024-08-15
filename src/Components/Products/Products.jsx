@@ -19,6 +19,7 @@ const Products = () => {
     const [Category, setCategory] = useState("");
     const changeCategory = (e) => {
         setCategory(e.target.value);
+        setCurrentPage(0);
     };
 
     // Select Price
@@ -48,9 +49,9 @@ const Products = () => {
         isLoading: isCountLoading,
         refetch: refetchCount,
     } = useQuery({
-        queryKey: ["laptopsCount", Category],
+        queryKey: ["laptopsCount", Category, Brand],
         queryFn: async () => {
-            const res = await axiosPublic.get(`/LaptopsCount?category=${Category}`);
+            const res = await axiosPublic.get(`/LaptopsCount?category=${Category}&brand=${Brand}`);
             return res.data.count;
         },
     });
@@ -66,20 +67,21 @@ const Products = () => {
         isLoading,
         refetch,
     } = useQuery({
-        queryKey: ["laptops", currentPage, itemperPage],
+        queryKey: ["laptops", currentPage, itemperPage, Brand, Category],
         queryFn: async () => {
-            const res = await axiosPublic.get(`/laptops?page=${currentPage}&size=${itemperPage}&category=${Category}`);
+            const res = await axiosPublic.get(`/laptops?page=${currentPage}&size=${itemperPage}&brand=${Brand}&category=${Category}`);
             return res.data;
         },
     });
 
     useEffect(() => {
         refetch();
-    }, [Category]);
-
-    useEffect(() => {
         refetchCount();
     }, [Category]);
+
+    // useEffect(() => {
+
+    // }, [Category]);
 
     // console.log(laptops);
 
@@ -96,7 +98,7 @@ const Products = () => {
 
     return (
         <div className="container mx-auto my-20">
-            <h1 className="text-center uppercase text-4xl mb-10">All Products - {count}</h1>
+            <h1 className="text-center uppercase text-4xl mb-10">Products - {count}</h1>
             <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 mb-5">
                 <select onChange={changeBrand} value={Brand} className="select select-bordered w-full">
                     <option value="">Brand</option>
