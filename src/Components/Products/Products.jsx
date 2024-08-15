@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import LaptopCard from "../LaptopCard/LaptopCard";
@@ -7,13 +7,29 @@ import { useLoaderData } from "react-router-dom";
 
 const Products = () => {
     const axiosPublic = useAxiosPublic();
-    const { count } = useLoaderData();
+    // const { count } = useLoaderData();
 
-    const [currentPage, setCurrentPage] = useState(0);
-    const itemperPage = 10;
-    const numberOfPages = Math.ceil(count / itemperPage);
-    const pages = [...Array(numberOfPages).keys()];
-    // console.log(pages);
+    // Select Brand
+    const [Brand, setBrand] = useState("");
+    const changeBrand = (e) => {
+        setBrand(e.target.value);
+    };
+
+    // Select Category
+    const [Category, setCategory] = useState("");
+    const changeCategory = (e) => {
+        setCategory(e.target.value);
+    };
+
+    // Select Price
+    const [Price, setPrice] = useState("");
+    const changePrice = (e) => {
+        setPrice(e.target.value);
+    };
+
+    // // console.log(Price);
+    // console.log(Category);
+    // // console.log(Brand);
 
     const prevPage = () => {
         if (currentPage > 0) {
@@ -27,13 +43,43 @@ const Products = () => {
         }
     };
 
-    const { data: laptops = [], isLoading } = useQuery({
+    const {
+        data: count = 0,
+        isLoading: isCountLoading,
+        refetch: refetchCount,
+    } = useQuery({
+        queryKey: ["laptopsCount", Category],
+        queryFn: async () => {
+            const res = await axiosPublic.get(`/LaptopsCount?category=${Category}`);
+            return res.data.count;
+        },
+    });
+
+    const [currentPage, setCurrentPage] = useState(0);
+    const itemperPage = 10;
+    const numberOfPages = Math.ceil(count / itemperPage);
+    const pages = [...Array(numberOfPages).keys()];
+    // console.log(pages);
+
+    const {
+        data: laptops = [],
+        isLoading,
+        refetch,
+    } = useQuery({
         queryKey: ["laptops", currentPage, itemperPage],
         queryFn: async () => {
-            const res = await axiosPublic.get(`/laptops?page=${currentPage}&size=${itemperPage}`);
+            const res = await axiosPublic.get(`/laptops?page=${currentPage}&size=${itemperPage}&category=${Category}`);
             return res.data;
         },
     });
+
+    useEffect(() => {
+        refetch();
+    }, [Category]);
+
+    useEffect(() => {
+        refetchCount();
+    }, [Category]);
 
     // console.log(laptops);
 
@@ -52,33 +98,32 @@ const Products = () => {
         <div className="container mx-auto my-20">
             <h1 className="text-center uppercase text-4xl mb-10">All Products - {count}</h1>
             <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 mb-5">
-                <select className="select select-bordered w-full">
-                    <option disabled selected>
-                        Who shot first?
-                    </option>
-                    <option>Han Solo</option>
-                    <option>Greedo</option>
+                <select onChange={changeBrand} value={Brand} className="select select-bordered w-full">
+                    <option value="">Brand</option>
+                    <option>Apple</option>
+                    <option>Dell</option>
+                    <option>HP</option>
+                    <option>Microsoft</option>
+                    <option>Acer</option>
+                    <option>Dell</option>
+                    <option>Razer</option>
+                    <option>Asus</option>
+                    <option>MSI</option>
+                    <option>Gigabyte</option>
+                    <option>Lenovo</option>
+                    <option>Samsung</option>
+                    <option>Google</option>
                 </select>
-                <select className="select select-bordered w-full">
-                    <option disabled selected>
-                        Who shot first?
-                    </option>
-                    <option>Han Solo</option>
-                    <option>Greedo</option>
+                <select onChange={changeCategory} value={Category} className="select select-bordered w-full">
+                    <option value="">Category</option>
+                    <option>Normal</option>
+                    <option>Gaming</option>
+                    <option>Heavy</option>
                 </select>
-                <select className="select select-bordered w-full">
-                    <option disabled selected>
-                        Who shot first?
-                    </option>
-                    <option>Han Solo</option>
-                    <option>Greedo</option>
-                </select>
-                <select className="select select-bordered w-full">
-                    <option disabled selected>
-                        Who shot first?
-                    </option>
-                    <option>Han Solo</option>
-                    <option>Greedo</option>
+                <select onChange={changePrice} value={Price} className="select select-bordered w-full">
+                    <option value="">Price</option>
+                    <option value="lowtohigh">Low to High</option>
+                    <option value="hightolow">High to Low</option>
                 </select>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
@@ -88,15 +133,15 @@ const Products = () => {
             </div>
             <div className="flex items-center justify-center gap-1 pagination my-4">
                 {/* <p>Cuttent Page {currentPage}</p> */}
-                <button onClick={prevPage} className="btn text-[#00203f] bg-[#adefd1] h-auto hover:bg-[#adefd1] hover:text-[#00203f]">
+                <button onClick={prevPage} className="btn text-white bg-blue-600 h-auto hover:bg-blue-600 hover:text-white">
                     Prev
                 </button>
                 {pages.map((page, index) => (
-                    <button onClick={() => setCurrentPage(page)} key={index} className={`w-10 h-10 text-[#00203f] bg-[#adefd1] ${currentPage === page && "selected"} hover:bg-[#00203f] hover:text-white btn`}>
+                    <button onClick={() => setCurrentPage(page)} key={index} className={`w-10 h-10 text-white bg-blue-600 ${currentPage === page && "selected"} hover:bg-[#00203f] hover:text-white btn`}>
                         {index + 1}
                     </button>
                 ))}
-                <button onClick={nextPage} className="btn text-[#00203f] bg-[#adefd1] h-auto hover:bg-[#adefd1] hover:text-[#00203f]">
+                <button onClick={nextPage} className="btn text-white bg-blue-600 h-auto hover:bg-blue-600 hover:text-white">
                     Next
                 </button>
             </div>
