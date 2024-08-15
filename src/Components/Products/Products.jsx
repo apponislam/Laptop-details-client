@@ -67,9 +67,9 @@ const Products = () => {
         isLoading,
         refetch,
     } = useQuery({
-        queryKey: ["laptops", currentPage, itemperPage, Brand, Category],
+        queryKey: ["laptops", currentPage, itemperPage, Brand, Category, Price],
         queryFn: async () => {
-            const res = await axiosPublic.get(`/laptops?page=${currentPage}&size=${itemperPage}&brand=${Brand}&category=${Category}`);
+            const res = await axiosPublic.get(`/laptops?page=${currentPage}&size=${itemperPage}&brand=${Brand}&category=${Category}&priceSort=${Price}`);
             return res.data;
         },
     });
