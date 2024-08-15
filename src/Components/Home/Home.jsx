@@ -3,6 +3,7 @@ import React from "react";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
 import { PacmanLoader } from "react-spinners";
 import LaptopCard from "../LaptopCard/LaptopCard";
+import { Link } from "react-router-dom";
 
 const Home = () => {
     const axiosPublic = useAxiosPublic();
@@ -30,10 +31,15 @@ const Home = () => {
     return (
         <div className="container mx-auto my-24">
             <h1 className="text-center uppercase text-4xl mb-10">Top Products</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 mb-10">
                 {homeLaptops.map((laptop) => (
                     <LaptopCard key={laptop._id} laptop={laptop}></LaptopCard>
                 ))}
+            </div>
+            <div className="flex justify-center items-center">
+                <Link to="/products">
+                    <button className="btn text-white bg-[#00203f] h-10 hover:bg-transparent hover:text-[#00203f] border border-[#00203f] hover:border-[#00203f]">View All</button>
+                </Link>
             </div>
         </div>
     );

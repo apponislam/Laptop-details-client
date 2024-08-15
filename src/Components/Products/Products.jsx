@@ -3,16 +3,33 @@ import useAxiosPublic from "../../Hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import LaptopCard from "../LaptopCard/LaptopCard";
 import { PacmanLoader } from "react-spinners";
-import { useLoaderData } from "react-router-dom";
+import RangeSlider from "react-range-slider-input";
+import "react-range-slider-input/dist/style.css";
 
 const Products = () => {
     const axiosPublic = useAxiosPublic();
     // const { count } = useLoaderData();
 
+    // // Range
+    const [priceRange, setPriceRange] = useState([0, 4000]);
+    const [price1, setPrice1] = useState(0);
+    const [price2, setPrice2] = useState(4000);
+
+    const handlePriceRangeChange = (value) => {
+        setPriceRange(value);
+        setPrice1(priceRange[0]);
+        setPrice2(priceRange[1]);
+        // const price1 = priceRange[0];
+        // const price2 = priceRange[1];
+        // console.log(price1, price2);
+        // console.log("Selected Price Range:", value);
+    };
+
     // Select Brand
     const [Brand, setBrand] = useState("");
     const changeBrand = (e) => {
         setBrand(e.target.value);
+        setCurrentPage(0);
     };
 
     // Select Category
@@ -127,6 +144,21 @@ const Products = () => {
                     <option value="lowtohigh">Low to High</option>
                     <option value="hightolow">High to Low</option>
                 </select>
+                <div className="flex items-center">
+                    <div className="w-full">
+                        <RangeSlider
+                            className="mb-2"
+                            min={0}
+                            max={4000}
+                            defaultValue={priceRange} // Set the default values
+                            onInput={handlePriceRangeChange} // Handle changes to the range
+                        />
+                        <div className="flex justify-between items-center px-3">
+                            <p className="text-xs">{price1}</p>
+                            <p className="text-xs">{price2}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
                 {laptops.map((laptop) => (
