@@ -39,7 +39,7 @@ const AuthProvider = ({ children }) => {
             setUser(mainUser);
             if (mainUser) {
                 //do something
-                console.log(mainUser);
+                // console.log(mainUser);
             } else {
                 //do something
             }

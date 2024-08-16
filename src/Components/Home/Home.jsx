@@ -16,10 +16,10 @@ const Home = () => {
             return res.data;
         },
     });
-    console.log(laptops);
+    // console.log(laptops);
 
     const homeLaptops = laptops.slice(0, 6);
-    console.log(homeLaptops);
+    // console.log(homeLaptops);
 
     if (isLoading) {
         return (

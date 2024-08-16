@@ -58,7 +58,7 @@ const Products = ({ onPriceRangeChange }) => {
     const [submittedSearch, setSubmittedSearch] = useState("");
 
     useEffect(() => {
-        console.log("Submitted Search:", submittedSearch);
+        // console.log("Submitted Search:", submittedSearch);
     }, [submittedSearch]);
 
     const handleSearchClick = (e) => {
