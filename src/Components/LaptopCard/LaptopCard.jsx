@@ -4,6 +4,10 @@ import PropTypes from "prop-types";
 const LaptopCard = ({ laptop }) => {
     // console.log(laptop);
     const { productImage, productName, description, ratings, brand, category, createdAt, price } = laptop;
+
+    const mainDate = createdAt.substring(0, 10);
+    console.log(mainDate); // Output: "2023-07-26"
+
     return (
         <div className="p-2 border border-[#00203f] rounded-xl">
             <div className="relative">
@@ -19,7 +23,7 @@ const LaptopCard = ({ laptop }) => {
                     <span className="font-bold">Category:-</span> {category}
                 </p>
                 <p className="mb-3">
-                    <span className="font-bold">Created:-</span> {createdAt}
+                    <span className="font-bold">Created:-</span> {mainDate}
                 </p>
                 <p className="mb-3">
                     <span className="font-bold">Created:-</span> <span className="text-green-600 font-extrabold">${price}</span>

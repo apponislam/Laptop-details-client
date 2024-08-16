@@ -1,28 +1,62 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import LaptopCard from "../LaptopCard/LaptopCard";
 import { PacmanLoader } from "react-spinners";
 import RangeSlider from "react-range-slider-input";
 import "react-range-slider-input/dist/style.css";
+import { Box, Slider, Typography } from "@mui/material";
+import { debounce } from "lodash";
+import PriceRangeFilter from "./PriceRangeFilter";
 
-const Products = () => {
+const Products = ({ onPriceRangeChange }) => {
     const axiosPublic = useAxiosPublic();
     // const { count } = useLoaderData();
 
     // // Range
-    const [priceRange, setPriceRange] = useState([0, 4000]);
-    const [price1, setPrice1] = useState(0);
-    const [price2, setPrice2] = useState(4000);
+    // const [priceRange, setPriceRange] = useState([0, 4000]);
+    // const [price1, setPrice1] = useState(0);
+    // const [price2, setPrice2] = useState(4000);
 
-    const handlePriceRangeChange = (value) => {
-        setPriceRange(value);
-        setPrice1(priceRange[0]);
-        setPrice2(priceRange[1]);
-        // const price1 = priceRange[0];
-        // const price2 = priceRange[1];
-        // console.log(price1, price2);
-        // console.log("Selected Price Range:", value);
+    // const handlePriceRangeChange = (value) => {
+    //     setPriceRange(value);
+    //     setPrice1(priceRange[0]);
+    //     setPrice2(priceRange[1]);
+    //     // const price1 = priceRange[0];
+    //     // const price2 = priceRange[1];
+    //     // console.log(price1, price2);
+    //     // console.log("Selected Price Range:", value);
+    // };
+
+    // const [priceRange, setPriceRange] = useState([100, 4000]);
+
+    // const debouncedPriceChange = useCallback(
+    //     debounce((newValue) => {
+    //         onPriceRangeChange(newValue);
+    //     }, 500), // Delay of 500ms
+    //     []
+    // );
+
+    // const handlePriceRangeChange = (event, newValue) => {
+    //     setPriceRange(newValue);
+    //     console.log("Selected Price Range:", newValue);
+    // };
+
+    // const [priceRange, setPriceRange] = useState([]);
+
+    // const handlePriceRangeChange = (newRange) => {
+    //     // console.log("Selected Price Range:", newRange);
+    //     setPriceRange(newRange);
+    //     const [minPrice, maxPrice] = newRange;
+    //     console.log("Selected Min Price:", minPrice);
+    //     console.log("Selected Max Price:", maxPrice);
+    //     // Add your API call or state update logic here
+    // };
+
+    const [priceRange, setPriceRange] = useState([100, 4000]);
+
+    const handlePriceRangeChange = (newRange) => {
+        setPriceRange(newRange);
     };
 
     // Select Brand
@@ -43,6 +77,12 @@ const Products = () => {
     const [Price, setPrice] = useState("");
     const changePrice = (e) => {
         setPrice(e.target.value);
+    };
+
+    // Select ByDate
+    const [ByDate, setByDate] = useState("");
+    const changeByDate = (e) => {
+        setByDate(e.target.value);
     };
 
     // // console.log(Price);
@@ -66,9 +106,9 @@ const Products = () => {
         isLoading: isCountLoading,
         refetch: refetchCount,
     } = useQuery({
-        queryKey: ["laptopsCount", Category, Brand],
+        queryKey: ["laptopsCount", Category, Brand, priceRange[0], priceRange[1]],
         queryFn: async () => {
-            const res = await axiosPublic.get(`/LaptopsCount?category=${Category}&brand=${Brand}`);
+            const res = await axiosPublic.get(`/LaptopsCount?category=${Category}&brand=${Brand}&minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}`);
             return res.data.count;
         },
     });
@@ -84,9 +124,9 @@ const Products = () => {
         isLoading,
         refetch,
     } = useQuery({
-        queryKey: ["laptops", currentPage, itemperPage, Brand, Category, Price],
+        queryKey: ["laptops", currentPage, itemperPage, Brand, Category, Price, ByDate, priceRange[0], priceRange[1]],
         queryFn: async () => {
-            const res = await axiosPublic.get(`/laptops?page=${currentPage}&size=${itemperPage}&brand=${Brand}&category=${Category}&priceSort=${Price}`);
+            const res = await axiosPublic.get(`/laptops?page=${currentPage}&size=${itemperPage}&brand=${Brand}&category=${Category}&priceSort=${Price}&minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}&ByDate=${ByDate}`);
             return res.data;
         },
     });
@@ -94,7 +134,7 @@ const Products = () => {
     useEffect(() => {
         refetch();
         refetchCount();
-    }, [Category]);
+    }, [Category, Brand, Price, ByDate, priceRange]);
 
     // useEffect(() => {
 
@@ -144,9 +184,15 @@ const Products = () => {
                     <option value="lowtohigh">Low to High</option>
                     <option value="hightolow">High to Low</option>
                 </select>
-                <div className="flex items-center">
-                    <div className="w-full">
-                        <RangeSlider
+                <select onChange={changeByDate} value={ByDate} className="select select-bordered w-full">
+                    <option value="">By Date</option>
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                </select>
+            </div>
+            <div className="flex items-center">
+                <div className="w-full">
+                    {/* <RangeSlider
                             className="mb-2"
                             min={0}
                             max={4000}
@@ -156,8 +202,14 @@ const Products = () => {
                         <div className="flex justify-between items-center px-3">
                             <p className="text-xs">{price1}</p>
                             <p className="text-xs">{price2}</p>
-                        </div>
-                    </div>
+                        </div> */}
+                    {/* <Box>
+                        <Slider value={priceRange} onChange={handlePriceRangeChange} valueLabelDisplay="auto" min={0} max={5000} step={10} marks />
+                        <p className="mb-4">
+                            Price Range: ${priceRange[0]} - ${priceRange[1]}
+                        </p>
+                    </Box> */}
+                    <PriceRangeFilter onPriceRangeChange={handlePriceRangeChange} priceRange2={priceRange} />
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
