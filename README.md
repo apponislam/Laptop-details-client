@@ -1,8 +1,22 @@
 # Laptop Details Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# [Live Link](https://ap-laptop-details.web.app/)
 
-Currently, two official plugins are available:
+Currently used plugins are available:
 
--   [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
--   [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+-   [React Router](https://reactrouter.com/en/main/start/tutorial) uses for single page rendering
+-   [tanstack/react-query](https://tanstack.com/query/latest/docs/framework/react/overview) uses for data fetching and refetching handlers
+-   [axios](https://axios-http.com/docs/intro) uses for data fetching from backend
+-   [firebase](https://console.firebase.google.com/u/0/) uses for handling user interaction
+-   [react-helmet-async](https://www.npmjs.com/package/react-helmet-async) uses for dynamic titles
+-   [react-hook-form](https://react-hook-form.com/get-started) uses for handle form errors and submission.
+    many others components used for simple functionality
+
+if you want run this project locally
+
+-   Firt Clone this repository or download this
+-   Then unzip the folder or open this folder
+-   Run the command promt with this folder
+-   After this steps command (npm i) for install node_modules of this project
+-   Then (npm run dev) for run this project locally
+-   Thank you.
