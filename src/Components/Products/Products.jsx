@@ -53,6 +53,24 @@ const Products = ({ onPriceRangeChange }) => {
     //     // Add your API call or state update logic here
     // };
 
+    const [searchTerm, setSearchTerm] = useState("");
+    const [submittedSearch, setSubmittedSearch] = useState("");
+
+    useEffect(() => {
+        console.log("Submitted Search:", submittedSearch);
+    }, [submittedSearch]);
+
+    const handleSearchClick = (e) => {
+        e.preventDefault();
+        // const search = e.target.search.value;
+        setSubmittedSearch(searchTerm);
+        // setCurrentPage(0);
+    };
+
+    // console.log("Submitted Search 2:", submittedSearch);
+
+    // Price Range
+
     const [priceRange, setPriceRange] = useState([100, 4000]);
 
     const handlePriceRangeChange = (newRange) => {
@@ -83,6 +101,7 @@ const Products = ({ onPriceRangeChange }) => {
     const [ByDate, setByDate] = useState("");
     const changeByDate = (e) => {
         setByDate(e.target.value);
+        console.log(e.target.value);
     };
 
     // // console.log(Price);
@@ -106,9 +125,9 @@ const Products = ({ onPriceRangeChange }) => {
         isLoading: isCountLoading,
         refetch: refetchCount,
     } = useQuery({
-        queryKey: ["laptopsCount", Category, Brand, priceRange[0], priceRange[1]],
+        queryKey: ["laptopsCount", Category, Brand, priceRange[0], priceRange[1], submittedSearch],
         queryFn: async () => {
-            const res = await axiosPublic.get(`/LaptopsCount?category=${Category}&brand=${Brand}&minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}`);
+            const res = await axiosPublic.get(`/LaptopsCount?category=${Category}&brand=${Brand}&minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}&search=${submittedSearch}`);
             return res.data.count;
         },
     });
@@ -124,9 +143,9 @@ const Products = ({ onPriceRangeChange }) => {
         isLoading,
         refetch,
     } = useQuery({
-        queryKey: ["laptops", currentPage, itemperPage, Brand, Category, Price, ByDate, priceRange[0], priceRange[1]],
+        queryKey: ["laptops", currentPage, itemperPage, Brand, Category, Price, ByDate, priceRange[0], priceRange[1], submittedSearch],
         queryFn: async () => {
-            const res = await axiosPublic.get(`/laptops?page=${currentPage}&size=${itemperPage}&brand=${Brand}&category=${Category}&priceSort=${Price}&minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}&ByDate=${ByDate}`);
+            const res = await axiosPublic.get(`/laptops?page=${currentPage}&size=${itemperPage}&brand=${Brand}&category=${Category}&priceSort=${Price}&minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}&ByDate=${ByDate}&search=${submittedSearch}`);
             return res.data;
         },
     });
@@ -134,7 +153,7 @@ const Products = ({ onPriceRangeChange }) => {
     useEffect(() => {
         refetch();
         refetchCount();
-    }, [Category, Brand, Price, ByDate, priceRange]);
+    }, [Category, Brand, Price, ByDate, priceRange, submittedSearch]);
 
     // useEffect(() => {
 
@@ -156,6 +175,14 @@ const Products = ({ onPriceRangeChange }) => {
     return (
         <div className="container mx-auto my-20">
             <h1 className="text-center uppercase text-4xl mb-10">Products - {count}</h1>
+            <form onSubmit={handleSearchClick}>
+                <div className="flex justify-center items-center mb-4">
+                    <div className="w-1/2 relative">
+                        <input type="text" placeholder="Type here" className="input input-bordered w-full" name="search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                        <button className="btn text-white bg-[#00203f] h-10 hover:bg-transparent hover:text-[#00203f] border border-[#00203f] hover:border-[#00203f] absolute top-0 right-0">Search</button>
+                    </div>
+                </div>
+            </form>
             <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 mb-5">
                 <select onChange={changeBrand} value={Brand} className="select select-bordered w-full">
                     <option value="">Brand</option>

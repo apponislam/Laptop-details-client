@@ -6,7 +6,7 @@ const LaptopCard = ({ laptop }) => {
     const { productImage, productName, description, ratings, brand, category, createdAt, price } = laptop;
 
     const mainDate = createdAt.substring(0, 10);
-    console.log(mainDate); // Output: "2023-07-26"
+    // console.log(mainDate);
 
     return (
         <div className="p-2 border border-[#00203f] rounded-xl">
