@@ -8,6 +8,7 @@ import "react-range-slider-input/dist/style.css";
 import { Box, Slider, Typography } from "@mui/material";
 import { debounce } from "lodash";
 import PriceRangeFilter from "./PriceRangeFilter";
+import { Helmet } from "react-helmet-async";
 
 const Products = ({ onPriceRangeChange }) => {
     const axiosPublic = useAxiosPublic();
@@ -62,9 +63,8 @@ const Products = ({ onPriceRangeChange }) => {
 
     const handleSearchClick = (e) => {
         e.preventDefault();
-        // const search = e.target.search.value;
         setSubmittedSearch(searchTerm);
-        // setCurrentPage(0);
+        setCurrentPage(0);
     };
 
     // console.log("Submitted Search 2:", submittedSearch);
@@ -174,6 +174,9 @@ const Products = ({ onPriceRangeChange }) => {
 
     return (
         <div className="container mx-auto my-20">
+            <Helmet>
+                <title>Products | AP LAPTOP</title>
+            </Helmet>
             <div className="mx-4 xl:mx-0">
                 <h1 className="text-center uppercase text-4xl mb-10">Products - {count}</h1>
                 <form onSubmit={handleSearchClick}>

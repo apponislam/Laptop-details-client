@@ -4,6 +4,7 @@ import useAxiosPublic from "../../Hooks/useAxiosPublic";
 import { PacmanLoader } from "react-spinners";
 import LaptopCard from "../LaptopCard/LaptopCard";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const Home = () => {
     const axiosPublic = useAxiosPublic();
@@ -30,6 +31,9 @@ const Home = () => {
 
     return (
         <div className="container mx-auto my-24">
+            <Helmet>
+                <title>Home | AP LAPTOP</title>
+            </Helmet>
             <div className="mx-4 xl:mx-0">
                 <h1 className="text-center uppercase text-4xl mb-10">Top Products</h1>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 mb-10">
